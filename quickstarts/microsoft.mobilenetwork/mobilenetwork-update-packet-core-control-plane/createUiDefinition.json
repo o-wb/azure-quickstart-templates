@@ -27,35 +27,29 @@
 					"regex": "^.*$",
 					"validationMessage": "Please enter a valid version"
 				}
+			},
+			{
+				"name": "existingSiteConfig",
+				"type": "Microsoft.Solutions.ArmApiControl",
+				"request": {
+					"method": "GET",
+					"path": "[concat(basics('packetCoreSelector').id, '?api-version=2022-03-01-preview')]"
+				},
+				"visible": false
 			}
-		]
-	},
-	"steps": [
-		{
-			"name": "getExistingConfig",
-			"label": "Get existing configuration",
-			"elements": [
-				{
-					"name": "existingSiteConfig",
-					"type": "Microsoft.Solutions.ArmApiControl",
-					"request": {
-						"method": "GET",
-						"path": "[concat(basics('packetCoreSelector').id, '?api-version=2022-03-01-preview')]"
-					}
-				}
-			]
+		],
+		"steps": [],
+		"outputs": {
+			"location": "[location()]",
+			"siteName": "[basics('packetCoreSelector').name]",
+			"existingMobileNetworkName": "[last(split(steps('getExistingConfig').existingSiteConfig.properties.mobileNetwork.id, '/'))]",
+			"existingPacketCoreNetworkTechnology": "[steps('getExistingConfig').existingSiteConfig.properties.coreNetworkTechnology]",
+			"existingPacketCoreCustomLocationId": "[steps('getExistingConfig').existingSiteConfig.properties.customLocation.id]",
+			"controlPlaneAccessInterfaceName": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.name]",
+			"controlPlaneAccessIpAddress": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.ipv4Address]",
+			"accessSubnet": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.ipv4Subnet]",
+			"accessGateway": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.ipv4Gateway]",
+			"newVersion": "[basics('newVersion')]"
 		}
-	],
-	"outputs": {
-		"location": "[location()]",
-		"siteName": "[basics('packetCoreSelector').name]",
-		"existingMobileNetworkName": "[last(split(steps('getExistingConfig').existingSiteConfig.properties.mobileNetwork.id, '/'))]",
-		"existingPacketCoreNetworkTechnology": "[steps('getExistingConfig').existingSiteConfig.properties.coreNetworkTechnology]",
-		"existingPacketCoreCustomLocationId": "[steps('getExistingConfig').existingSiteConfig.properties.customLocation.id]",
-		"controlPlaneAccessInterfaceName": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.name]",
-		"controlPlaneAccessIpAddress": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.ipv4Address]",
-		"accessSubnet": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.ipv4Subnet]",
-		"accessGateway": "[steps('getExistingConfig').existingSiteConfig.properties.controlPlaneAccessInterface.ipv4Gateway]",
-		"newVersion": "[basics('newVersion')]"
 	}
 }
